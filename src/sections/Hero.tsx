@@ -1,6 +1,6 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, HeartPulse, Utensils, Pill, Dumbbell } from 'lucide-react';
+import { ArrowRight, HeartPulse, Utensils, Pill, Dumbbell, Play, Pause, Volume2, VolumeX } from 'lucide-react';
 
 const Hero = () => {
   const heroRef = useRef<HTMLDivElement>(null);
@@ -28,6 +28,129 @@ const Hero = () => {
     { value: 'Whole body', label: 'Tested 2x per year', sublabel: '' },
     { value: '৳82', label: 'per day', sublabel: '৳30,000 per year' },
   ];
+
+  // Video Header Component
+  const VideoHeader = () => {
+    const videoRef = useRef<HTMLVideoElement>(null);
+    const [isPlaying, setIsPlaying] = useState(true);
+    const [isMuted, setIsMuted] = useState(true);
+
+    useEffect(() => {
+      const video = videoRef.current;
+      if (video) {
+        video.play().catch(() => {
+          // Auto-play was prevented, show play button
+          setIsPlaying(false);
+        });
+      }
+    }, []);
+
+    const togglePlay = () => {
+      const video = videoRef.current;
+      if (video) {
+        if (isPlaying) {
+          video.pause();
+        } else {
+          video.play();
+        }
+        setIsPlaying(!isPlaying);
+      }
+    };
+
+    const toggleMute = () => {
+      const video = videoRef.current;
+      if (video) {
+        video.muted = !isMuted;
+        setIsMuted(!isMuted);
+      }
+    };
+
+    return (
+      <div className="animate-on-scroll opacity-0 translate-y-8 transition-all duration-700 delay-300 lg:pl-8">
+        <div className="relative">
+          {/* Main Video Container */}
+          <div className="relative z-10 rounded-3xl shadow-2xl overflow-hidden bg-black">
+            <video
+              ref={videoRef}
+              src="/videos/hero-video.mov"
+              autoPlay
+              muted
+              loop
+              playsInline
+              className="w-full h-[500px] object-cover"
+            />
+            
+            {/* Gradient overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent pointer-events-none" />
+            
+            {/* Video Controls */}
+            <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between z-20">
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={togglePlay}
+                  className="w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white transition-colors shadow-lg"
+                  aria-label={isPlaying ? 'Pause' : 'Play'}
+                >
+                  {isPlaying ? (
+                    <Pause size={18} className="text-[#242424]" />
+                  ) : (
+                    <Play size={18} className="text-[#242424] ml-0.5" />
+                  )}
+                </button>
+                <button
+                  onClick={toggleMute}
+                  className="w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white transition-colors shadow-lg"
+                  aria-label={isMuted ? 'Unmute' : 'Mute'}
+                >
+                  {isMuted ? (
+                    <VolumeX size={18} className="text-[#242424]" />
+                  ) : (
+                    <Volume2 size={18} className="text-[#242424]" />
+                  )}
+                </button>
+              </div>
+              <div className="bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs font-medium text-[#242424] shadow-lg">
+                Watch how it works
+              </div>
+            </div>
+          </div>
+
+          {/* Floating Badge - Lab Locations */}
+          <div className="absolute -bottom-6 -left-6 bg-white rounded-2xl shadow-xl p-4 z-20 animate-float">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="2">
+                  <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                  <circle cx="12" cy="10" r="3" />
+                </svg>
+              </div>
+              <div>
+                <p className="text-lg font-bold text-[#242424]">50+</p>
+                <p className="text-xs text-[#616161]">Lab Locations</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Floating Badge - Health Score */}
+          <div className="absolute -top-4 -right-4 bg-white rounded-2xl shadow-xl p-4 z-20 animate-float" style={{ animationDelay: '1s' }}>
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
+                <HeartPulse className="text-[#3e8cff]" size={24} />
+              </div>
+              <div>
+                <p className="text-lg font-bold text-[#242424]">94%</p>
+                <p className="text-xs text-[#616161]">Health Score</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Decorative Elements */}
+          <div className="absolute -top-6 -right-6 w-24 h-24 bg-[#8ccfff]/30 rounded-full blur-xl" />
+          <div className="absolute -bottom-8 -left-8 w-32 h-32 bg-[#3e8cff]/20 rounded-full blur-xl" />
+        </div>
+      </div>
+    );
+  };
 
   return (
     <section
@@ -107,54 +230,8 @@ const Hero = () => {
             </div>
           </div>
 
-          {/* Right Content - Real Health Image */}
-          <div className="animate-on-scroll opacity-0 translate-y-8 transition-all duration-700 delay-300 lg:pl-8">
-            <div className="relative">
-              {/* Main Image */}
-              <div className="relative z-10 rounded-3xl shadow-2xl overflow-hidden">
-                <img 
-                  src="/images/health-data.jpg" 
-                  alt="Healthcare professional reviewing medical data" 
-                  className="w-full h-[500px] object-cover"
-                />
-                {/* Gradient overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-              </div>
-
-              {/* Floating Badge - Lab Locations */}
-              <div className="absolute -bottom-6 -left-6 bg-white rounded-2xl shadow-xl p-4 z-20 animate-float">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="2">
-                      <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
-                      <circle cx="12" cy="10" r="3" />
-                    </svg>
-                  </div>
-                  <div>
-                    <p className="text-lg font-bold text-[#242424]">50+</p>
-                    <p className="text-xs text-[#616161]">Lab Locations</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Floating Badge - Health Score */}
-              <div className="absolute -top-4 -right-4 bg-white rounded-2xl shadow-xl p-4 z-20 animate-float" style={{ animationDelay: '1s' }}>
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
-                    <HeartPulse className="text-[#3e8cff]" size={24} />
-                  </div>
-                  <div>
-                    <p className="text-lg font-bold text-[#242424]">94%</p>
-                    <p className="text-xs text-[#616161]">Health Score</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Decorative Elements */}
-              <div className="absolute -top-6 -right-6 w-24 h-24 bg-[#8ccfff]/30 rounded-full blur-xl" />
-              <div className="absolute -bottom-8 -left-8 w-32 h-32 bg-[#3e8cff]/20 rounded-full blur-xl" />
-            </div>
-          </div>
+          {/* Right Content - Video Header */}
+          <VideoHeader />
         </div>
       </div>
 
