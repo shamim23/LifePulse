@@ -1,4 +1,5 @@
 import Hero from '../sections/Hero';
+import Longevity from '../sections/Longevity';
 import DiseaseMonitoring from '../sections/DiseaseMonitoring';
 import LabTests from '../sections/LabTests';
 import Testimonials from '../sections/Testimonials';
@@ -9,6 +10,7 @@ const Home = () => {
   return (
     <main>
       <Hero />
+      <Longevity />
       <DiseaseMonitoring />
       <LabTests />
       <Testimonials />

@@ -10,6 +10,7 @@ import TestResults from './pages/TestResults';
 import BiomarkerDetail from './pages/BiomarkerDetail';
 import ActionPlan from './pages/ActionPlan';
 import ClinicianNotes from './pages/ClinicianNotes';
+import Longevity from './pages/Longevity';
 import './App.css';
 
 // Scroll to top on route change
@@ -91,6 +92,14 @@ function App() {
           element={
             <MainLayout>
               <ClinicianNotes />
+            </MainLayout>
+          } 
+        />
+        <Route 
+          path="/longevity" 
+          element={
+            <MainLayout>
+              <Longevity />
             </MainLayout>
           } 
         />

@@ -17,11 +17,11 @@ const Navbar = () => {
 
   const navLinks = [
     { name: 'Dashboard', href: '/dashboard' },
+    { name: 'Longevity', href: '/longevity' },
     { name: 'How it works', href: '/how-it-works' },
     { name: 'What we test', href: '/what-we-test' },
     { name: 'Scans', href: '/scans' },
     { name: 'FAQ', href: '/faq' },
-    { name: 'About', href: '/about' },
   ];
 
   const isActive = (path: string) => location.pathname === path;
